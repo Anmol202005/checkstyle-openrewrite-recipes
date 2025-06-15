@@ -8,5 +8,8 @@
     <allow pkg="org.openrewrite"/>
     <allow pkg="org.checkstyle"/>
     <allow pkg="java.io"/>
+    <allow pkg="java.util"/>
     <allow pkg="java.nio"/>
+    <allow pkg="java.lang"/>
+    <allow pkg="javax.xml.stream"/>
 </import-control>

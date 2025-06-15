@@ -17,30 +17,42 @@
 
 package org.checkstyle.autofix.recipe;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.util.List;
 
+import javax.xml.stream.XMLStreamException;
+
+import org.checkstyle.autofix.parser.CheckstyleRecord;
+import org.checkstyle.autofix.parser.CheckstyleReportsParser;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.Recipe;
 
 public class UpperEllRecipeTest extends AbstractRecipeTest {
 
     @Override
-    protected Recipe getRecipe() {
-        return new UpperEllRecipe();
+    protected Recipe getRecipe() throws XMLStreamException, FileNotFoundException {
+        final String reportPath = "src/test/resources/org/checkstyle/autofix/recipe/upperell"
+                + "/report.xml";
+
+        final List<CheckstyleRecord> violations =
+                CheckstyleReportsParser.parse(Path.of(reportPath));
+        return new UpperEllRecipe(violations);
     }
 
     @Test
-    void hexOctalLiteralTest() throws IOException {
+    void hexOctalLiteralTest() throws IOException, XMLStreamException {
         testRecipe("upperell", "HexOctalLiteral");
     }
 
     @Test
-    void complexLongLiterals() throws IOException {
+    void complexLongLiterals() throws IOException, XMLStreamException {
         testRecipe("upperell", "ComplexLongLiterals");
     }
 
     @Test
-    void stringAndCommentTest() throws IOException {
+    void stringAndCommentTest() throws IOException, XMLStreamException {
         testRecipe("upperell", "StringAndComments");
     }
 }

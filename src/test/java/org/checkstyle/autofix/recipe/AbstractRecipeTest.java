@@ -20,9 +20,12 @@ package org.checkstyle.autofix.recipe;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.openrewrite.java.Assertions.java;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import javax.xml.stream.XMLStreamException;
 
 import org.checkstyle.autofix.ClassRenameRecipe;
 import org.openrewrite.Recipe;
@@ -53,7 +56,7 @@ public abstract class AbstractRecipeTest implements RewriteTest {
      *
      * @return the main recipe to test
      */
-    protected abstract Recipe getRecipe();
+    protected abstract Recipe getRecipe() throws FileNotFoundException, XMLStreamException;
 
     /**
      * Tests a recipe with the given recipe path and test case name.
@@ -67,7 +70,8 @@ public abstract class AbstractRecipeTest implements RewriteTest {
      * @param testCaseName the name of the test case (should match directory and file names)
      * @throws IOException if files cannot be read
      */
-    protected void testRecipe(String recipePath, String testCaseName) throws IOException {
+    protected void testRecipe(String recipePath, String testCaseName)
+            throws IOException, XMLStreamException {
         final String testCaseDir = testCaseName.toLowerCase();
         final String inputFileName = "Input" + testCaseName + ".java";
         final String outputFileName = "Output" + testCaseName + ".java";

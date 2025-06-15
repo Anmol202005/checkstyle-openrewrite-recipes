@@ -17,6 +17,11 @@
 
 package org.checkstyle.autofix.recipe;
 
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.checkstyle.autofix.parser.CheckstyleRecord;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Recipe;
 import org.openrewrite.TreeVisitor;
@@ -29,6 +34,16 @@ import org.openrewrite.java.tree.JavaType;
  * in long literals with uppercase 'L'.
  */
 public class UpperEllRecipe extends Recipe {
+
+    private List<CheckstyleRecord> violations;
+
+    public UpperEllRecipe() {
+        this.violations = new ArrayList<>();
+    }
+
+    public UpperEllRecipe(List<CheckstyleRecord> violations) {
+        this.violations = violations;
+    }
 
     @Override
     public String getDisplayName() {
@@ -43,26 +58,57 @@ public class UpperEllRecipe extends Recipe {
 
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
-        return new UpperEllVisitor();
+        return new UpperEllVisitor(violations);
     }
 
-    /**
-     * Visitor that replaces lowercase 'l' suffixes in long literals with uppercase 'L'.
-     */
     private static final class UpperEllVisitor extends JavaIsoVisitor<ExecutionContext> {
+
+        private final List<CheckstyleRecord> violations;
+        private String fullSource;
+        private String currentFileName;
+
+        UpperEllVisitor(List<CheckstyleRecord> violations) {
+            this.violations = violations;
+        }
+
+        @Override
+        public J.CompilationUnit visitCompilationUnit(J.CompilationUnit cu, ExecutionContext ctx) {
+            this.fullSource = cu.printAll();
+            this.currentFileName = cu.getSourcePath().toString();
+            return super.visitCompilationUnit(cu, ctx);
+        }
+
         @Override
         public J.Literal visitLiteral(J.Literal literal, ExecutionContext ctx) {
             J.Literal result = super.visitLiteral(literal, ctx);
             final String valueSource = result.getValueSource();
 
             if (valueSource != null && valueSource.endsWith("l")
-                    && result.getType() == JavaType.Primitive.Long) {
+                    && result.getType() == JavaType.Primitive.Long
+                    && isAtViolationLocation(valueSource)) {
+
                 final String numericPart = valueSource.substring(0, valueSource.length() - 1);
-                final String newValueSource = numericPart + "L";
-                result = result.withValueSource(newValueSource);
+                result = result.withValueSource(numericPart + "L");
             }
+
             return result;
         }
 
+        private boolean isAtViolationLocation(String literalText) {
+            final int literalIndex = fullSource.indexOf(literalText);
+
+            final String textBeforeLiteral = fullSource.substring(0, literalIndex);
+            final int line = 1 + (int) textBeforeLiteral.chars()
+                    .filter(character -> character == '\n').count();
+
+            return violations.stream().anyMatch(violation -> {
+
+                final Path violationPath = Path.of(violation.getFileName());
+                final Path currentPath = Path.of(currentFileName);
+
+                return violation.getLine() == line
+                        && violationPath.equals(currentPath);
+            });
+        }
     }
 }

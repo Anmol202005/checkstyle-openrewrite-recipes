@@ -22,7 +22,7 @@
         <error line="7" column="30" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
-        <error line="8" column="21" severity="error"
+        <error line="8" column="31" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
         <error line="11" column="25" severity="error"
@@ -49,31 +49,28 @@
         <error line="8" column="27" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
-        <error line="10" column="30" severity="error"
+        <error line="11" column="30" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
-        <error line="11" column="32" severity="error"
+        <error line="12" column="32" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
-        <error line="12" column="34" severity="error"
-               message="Use uppercase 'L' for long literals."
-               source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
-        <error line="13" column="25" severity="error"
+        <error line="13" column="34" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
         <error line="14" column="25" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
-        <error line="15" column="33" severity="error"
+        <error line="15" column="25" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
-        <error line="18" column="57" severity="error"
+        <error line="18" column="33" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
-        <error line="22" column="28" severity="error"
+        <error line="22" column="57" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
-        <error line="23" column="32" severity="error"
+        <error line="23" column="33" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
         <error line="23" column="36" severity="error"
@@ -82,7 +79,7 @@
         <error line="23" column="40" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
-        <error line="27" column="39" severity="error"
+        <error line="27" column="40" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
         <error line="27" column="45" severity="error"
@@ -94,25 +91,25 @@
         <error line="32" column="17" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
-        <error line="33" column="30" severity="error"
+        <error line="33" column="31" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
-        <error line="34" column="26" severity="error"
+        <error line="34" column="27" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
         <error line="36" column="45" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
-        <error line="37" column="31" severity="error"
+        <error line="37" column="41" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
         <error line="38" column="33" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
-        <error line="43" column="23" severity="error"
+        <error line="43" column="19" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
-        <error line="45" column="19" severity="error"
+        <error line="45" column="23" severity="error"
                message="Use uppercase 'L' for long literals."
                source="com.puppycrawl.tools.checkstyle.checks.coding.UpperEllCheck"/>
     </file>

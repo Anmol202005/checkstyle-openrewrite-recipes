@@ -14,35 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 ///////////////////////////////////////////////////////////////////////////////////////////////
+package org.checkstyle.autofix.recipe.header.headerblanklines;
 
-package org.checkstyle.autofix.recipe;
-
-import java.io.IOException;
-
-import org.junit.jupiter.api.Test;
-import org.openrewrite.Recipe;
-
-import javax.xml.stream.XMLStreamException;
-
-public class UpperEllRecipeTest extends AbstractRecipeTest {
-
-    @Override
-    protected Recipe getRecipe() {
-        return new UpperEllRecipe();
-    }
-
-    @Test
-    void hexOctalLiteralTest() throws IOException, XMLStreamException {
-        testRecipe("upperell", "HexOctalLiteral");
-    }
-
-    @Test
-    void complexLongLiterals() throws IOException, XMLStreamException {
-        testRecipe("upperell", "ComplexLongLiterals");
-    }
-
-    @Test
-    void stringAndCommentTest() throws IOException, XMLStreamException {
-        testRecipe("upperell", "StringAndComments");
-    }
+public class OutputHeaderBlankLines {
 }

@@ -28,6 +28,8 @@ import org.checkstyle.autofix.ClassRenameRecipe;
 import org.openrewrite.Recipe;
 import org.openrewrite.test.RewriteTest;
 
+import javax.xml.stream.XMLStreamException;
+
 /**
  * Base test class for recipe testing that provides common functionality
  * for reading test files and executing recipe tests with preprocessing.
@@ -53,7 +55,7 @@ public abstract class AbstractRecipeTest implements RewriteTest {
      *
      * @return the main recipe to test
      */
-    protected abstract Recipe getRecipe();
+    protected abstract Recipe getRecipe() throws IOException, XMLStreamException;
 
     /**
      * Tests a recipe with the given recipe path and test case name.
@@ -67,7 +69,7 @@ public abstract class AbstractRecipeTest implements RewriteTest {
      * @param testCaseName the name of the test case (should match directory and file names)
      * @throws IOException if files cannot be read
      */
-    protected void testRecipe(String recipePath, String testCaseName) throws IOException {
+    protected void testRecipe(String recipePath, String testCaseName) throws IOException, XMLStreamException {
         final String testCaseDir = testCaseName.toLowerCase();
         final String inputFileName = "Input" + testCaseName + ".java";
         final String outputFileName = "Output" + testCaseName + ".java";

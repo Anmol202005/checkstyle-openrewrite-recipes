@@ -4,10 +4,13 @@
         "https://checkstyle.org/dtds/configuration_1_3.dtd">
 <module name="Checker">
     <property name="charset" value="UTF-8"/>
+    <module name="UpperEll"/>
+    <module name="TreeWalker">
         <module name="Header">
-            <property name="headerFile" value="src/test/resources/org/checkstyle/autofix/recipe/header/header.txt"/>
+            <property name="headerFile" value="${header.file}"/>
             <property name="fileExtensions" value="java"/>
             <property name="ignoreLines" value="3"/>
+            <property name="charset" value="UTF-8"/>
         </module>
-
+    </module>
 </module>

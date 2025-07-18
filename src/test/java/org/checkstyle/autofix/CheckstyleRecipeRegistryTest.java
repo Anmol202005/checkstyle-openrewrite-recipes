@@ -21,7 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
+import org.checkstyle.autofix.parser.CheckConfiguration;
 import org.checkstyle.autofix.parser.CheckstyleViolation;
+import org.checkstyle.autofix.parser.ConfigurationLoader;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.Recipe;
 
@@ -40,14 +42,17 @@ public class CheckstyleRecipeRegistryTest {
                         "Use uppercase 'L' for long literals.", "Example2.java"),
 
                 new CheckstyleViolation(8, 12, "error",
-                        "com.puppycrawl.tools.checkstyle.checks.coding.FinalLocalVariableCheck",
-                        "Variable should be declared final.", "Example3.java")
+                        "header",
+                        "Line does not match expected header line", "Example3.java")
         );
+        final CheckConfiguration config = ConfigurationLoader.loadConfiguration(
+                "src/test/resources/org/checkstyle/autofix/reciperegistry/config.xml",
+                "src/test/resources/org/checkstyle/autofix/reciperegistry/check.properties");
 
-        final List<Recipe> recipes = CheckstyleRecipeRegistry.getRecipes(violations);
+        final List<Recipe> recipes = CheckstyleRecipeRegistry.getRecipes(violations, config);
 
-        assertEquals(1, recipes.size(), "Should return one recipe");
-        assertEquals("UpperEll recipe", recipes.get(0).getDisplayName());
+        assertEquals(2, recipes.size(), "Should return one recipe");
+        assertEquals("Header recipe", recipes.get(0).getDisplayName());
     }
 
 }

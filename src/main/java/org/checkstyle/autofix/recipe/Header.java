@@ -148,6 +148,8 @@ public class Header extends Recipe {
                     final String fixedHeader = fixHeaderLines(licenseHeader,
                                                                 currentHeader, ignoreLines);
 
+                    System.out.println(fixedHeader);
+
                     sourceFile = sourceFile.withPrefix(
                             Space.format(fixedHeader + System.lineSeparator()));
                 }

@@ -148,7 +148,7 @@ public class Header extends Recipe {
                     final String fixedHeader = fixHeaderLines(licenseHeader,
                                                                 currentHeader, ignoreLines);
 
-                    System.out.println(fixedHeader);
+                    System.out.println(escapeString(fixedHeader));
 
                     sourceFile = sourceFile.withPrefix(
                             Space.format(fixedHeader + System.lineSeparator()));
@@ -156,6 +156,18 @@ public class Header extends Recipe {
                 result = super.visit(sourceFile, ctx);
             }
             return result;
+        }
+
+        public static String escapeString(String input) {
+            return input
+                    .replace("\\", "\\\\")
+                    .replace("\n", "\\n")
+                    .replace("\t", "\\t")
+                    .replace("\r", "\\r")
+                    .replace("\b", "\\b")
+                    .replace("\f", "\\f")
+                    .replace("\"", "\\\"")
+                    .replace("\'", "\\'");
         }
 
         private String extractCurrentHeader(JavaSourceFile sourceFile) {

@@ -29,8 +29,10 @@ import java.util.List;
 
 import org.checkstyle.autofix.InputClassRenamer;
 import org.checkstyle.autofix.RemoveViolationComments;
+import org.checkstyle.autofix.parser.CheckConfiguration;
 import org.checkstyle.autofix.parser.CheckstyleReportParser;
 import org.checkstyle.autofix.parser.CheckstyleViolation;
+import org.checkstyle.autofix.parser.ConfigurationLoader;
 import org.openrewrite.Recipe;
 import org.openrewrite.test.RewriteTest;
 
@@ -46,7 +48,8 @@ public abstract class AbstractRecipeTestSupport extends AbstractXmlTestSupport
 
     protected abstract String getSubpackage();
 
-    protected abstract Recipe createRecipe(List<CheckstyleViolation> violations);
+    protected abstract Recipe createRecipe(List<CheckstyleViolation> violations,
+                                           CheckConfiguration configuration);
 
     @Override
     protected String getPackageLocation() {
@@ -54,24 +57,40 @@ public abstract class AbstractRecipeTestSupport extends AbstractXmlTestSupport
     }
 
     protected void verify(String testCaseName) throws Exception {
-        final String inputFileName = "Input" + testCaseName + ".java";
-        final String outputFileName = "Output" + testCaseName + ".java";
-        final String inputPath = testCaseName.toLowerCase() + "/" + inputFileName;
-        final String outputPath = testCaseName.toLowerCase() + "/" + outputFileName;
 
-        verifyOutputFile(outputPath);
-
+        final String inputPath = getInputFilePath(testCaseName);
+        final String outputPath = getOutputFilePath(testCaseName);
         final Configuration config = getCheckConfigurations(inputPath);
+        verifyOutputFile(outputPath, config);
+
+        final List<CheckstyleViolation> violations = runCheckstyle(inputPath, config);
+
+        verifyWithInlineConfigParser(getPath(inputPath), convertToExpectedMessages(violations));
+
+        final String beforeCode = readFile(getPath(inputPath));
+        final String expectedAfterCode = readFile(getPath(outputPath));
+        final CheckConfiguration checkConfig = ConfigurationLoader.mapConfiguration(config);
+        final Recipe mainRecipe = createRecipe(violations, checkConfig);
+        testRecipe(beforeCode, expectedAfterCode,
+                getPath(inputPath), new InputClassRenamer(),
+                mainRecipe, new RemoveViolationComments());
+    }
+
+    protected void verify(Configuration config, String testCaseName) throws Exception {
+
+        final String inputPath = getInputFilePath(testCaseName);
+        final String outputPath = getOutputFilePath(testCaseName);
+
+        verifyOutputFile(outputPath, config);
+
         final List<CheckstyleViolation> violations = runCheckstyle(inputPath, config);
 
         final String beforeCode = readFile(getPath(inputPath));
         final String expectedAfterCode = readFile(getPath(outputPath));
-
-        final Recipe mainRecipe = createRecipe(violations);
-
+        final CheckConfiguration checkConfig = ConfigurationLoader.mapConfiguration(config);
+        final Recipe mainRecipe = createRecipe(violations, checkConfig);
         testRecipe(beforeCode, expectedAfterCode,
-                getPath(inputPath), new InputClassRenamer(),
-                new RemoveViolationComments(), mainRecipe);
+                getPath(inputPath), new InputClassRenamer(), mainRecipe);
     }
 
     private List<CheckstyleViolation> runCheckstyle(String inputPath,
@@ -95,9 +114,8 @@ public abstract class AbstractRecipeTestSupport extends AbstractXmlTestSupport
         }
     }
 
-    private void verifyOutputFile(String outputPath) throws Exception {
+    private void verifyOutputFile(String outputPath, Configuration config) throws Exception {
 
-        final Configuration config = getCheckConfigurations(outputPath);
         final List<CheckstyleViolation> violations = runCheckstyle(outputPath, config);
         if (!violations.isEmpty()) {
             final StringBuilder violationMessage =
@@ -117,6 +135,21 @@ public abstract class AbstractRecipeTestSupport extends AbstractXmlTestSupport
         }
     }
 
+    private String[] convertToExpectedMessages(List<CheckstyleViolation> violations) {
+        return violations.stream()
+                .map(violation -> {
+                    final String message;
+                    if (violation.getColumn() > 0) {
+                        message = violation.getLine() + ":"
+                                + violation.getColumn() + ": " + violation.getMessage();
+                    }
+                    else {
+                        message = violation.getLine() + ": " + violation.getMessage();
+                    }
+                    return message; })
+                .toArray(String[]::new);
+    }
+
     private Configuration getCheckConfigurations(String inputPath) throws Exception {
         final String configFilePath = getPath(inputPath);
         final TestInputConfiguration testInputConfiguration =
@@ -133,4 +166,15 @@ public abstract class AbstractRecipeTestSupport extends AbstractXmlTestSupport
             );
         });
     }
+
+    private String getInputFilePath(String testCaseName) {
+        final String inputFileName = "Input" + testCaseName + ".java";
+        return testCaseName.toLowerCase() + "/" + inputFileName;
+    }
+
+    private String getOutputFilePath(String testCaseName) {
+        final String inputFileName = "Output" + testCaseName + ".java";
+        return testCaseName.toLowerCase() + "/" + inputFileName;
+    }
+
 }
